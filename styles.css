@@ -465,3 +465,96 @@ select:focus, input:focus { border-color: var(--c-border-mid); }
 }
 
 .row-all-positive .mic-value { color: #c0392b; }
+
+/* ── Mobile / narrow viewports ───────────────────── */
+
+@media screen and (max-width: 860px) {
+  /* Single natural page scroll on mobile instead of nested scroll regions —
+     the plate grid and results panel both size to content and flow.
+     Scoped to `screen` so print (which renders its own two-column layout
+     from print.css at print-preview widths that can fall in this range)
+     is never touched by these rules. */
+  html, body { height: auto; }
+
+  .workspace { flex-direction: column; }
+
+  .left-panel {
+    flex: none;
+    border-right: none;
+    border-bottom: 1px solid var(--c-border);
+  }
+
+  .grid-scroll {
+    flex: none;
+    overflow-y: visible;
+  }
+
+  .right-panel {
+    width: 100%;
+    flex: none;
+  }
+
+  .right-body {
+    flex: none;
+    overflow-y: visible;
+    /* Breathing room at the end of the page scroll, plus safe-area on
+       notched devices (viewport-fit=cover in index.html enables this). */
+    padding-bottom: calc(2rem + env(safe-area-inset-bottom));
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .toolbar {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 0.75rem 1rem;
+    row-gap: 0.75rem;
+  }
+
+  /* Top-aligned labels throughout: label above control, all flush to the
+     same left edge and full width — MHK/plate-select now matches the
+     Sample/Date treatment instead of standing out as a different pattern. */
+  .toolbar-left {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+    width: 100%;
+  }
+
+  .toolbar-left .app-title {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    color: var(--c-muted);
+  }
+
+  #plate-select { width: 100%; }
+
+  .toolbar-center { width: 100%; flex-direction: column; align-items: stretch; gap: 1rem; }
+
+  .field { flex-direction: column; align-items: flex-start; gap: 0.25rem; }
+  .field input { width: 100%; }
+
+  select,
+  input[type="text"],
+  input[type="date"] {
+    font-size: 16px; /* iOS Safari zooms on focus below 16px */
+    height: 40px;
+  }
+
+  .plate-bar, .right-header { padding: 0 1rem; }
+
+  .left-footer {
+    padding: 0.75rem 1rem;
+    gap: 0.75rem;
+  }
+
+  .left-footer .btn { flex: 1; justify-content: center; }
+
+  :root {
+    --well-min-w: 44px;
+    --well-h:     50px;
+  }
+
+  .plate-grid { min-width: 600px; }
+}

@@ -7,6 +7,14 @@
 
 ## Changelog
 
+### v1.6.0 — 2026-09-03
+- Mobile support added: `.workspace` stacks vertically below 860px (plate above, results below), single natural page scroll instead of nested scroll regions
+- Toolbar wraps below 600px; Sample/Date/plate-select switch to top-aligned labels (label above control, full width) for consistent alignment
+- Inputs/select bumped to 16px font on mobile (prevents iOS Safari auto-zoom on focus)
+- Plate grid well size shrinks below 600px (`--well-min-w` 52→44, `--well-h` 58→50) to reduce horizontal scroll
+- Bottom padding + `env(safe-area-inset-bottom)` added under results on mobile so content doesn't butt against the screen edge; `viewport-fit=cover` added to the viewport meta tag to enable it
+- Fixed: a bare (unscoped) mobile `@media (max-width: 860px)` rule was matching Chrome's ~816px print-preview width and corrupting the print layout — scoped all mobile rules to `@media screen and (...)` and added a defensive reset in `print.css` (see Print Layout → Gotcha below)
+
 ### v1.5.0 — 2026-08-28
 - Fixed PRX/TET multi-row drug misalignment: vertical spacing now uses `row-gap: 4px` uniformly; removed per-cell `margin-top/bottom` from group border classes so all cells in a row are perfectly aligned
 - Drug group gaps unified: 4px vertical (row-gap) and 4px horizontal (2px each side) between all groups
@@ -200,6 +208,29 @@ Drug `id` must be unique within a plate. Drugs shared between plates use suffixe
 - Right panel: MIC results table (260px fixed width)
 - Footer buttons hidden
 - Positive wells forced to print with background colour (`print-color-adjust: exact`)
+
+### ⚠️ Gotcha: `@media (max-width: …)` rules leak into print unless scoped
+
+`print.css` is only ever active for `media="print"`, but it has **no width
+condition** — it applies at whatever width the browser renders the print
+preview at, which for A4/Letter landscape is commonly ~800-830px in Chrome.
+
+Every responsive/mobile rule in `styles.css` lives under breakpoints at
+`max-width: 860px` and `600px`. If one of those is ever written as a bare
+`@media (max-width: 860px)` instead of `@media screen and (max-width:
+860px)`, it also matches during print — because a media query with no type
+defaults to `all`, not `screen`. The bare rule and print.css's dedicated
+print layout then apply simultaneously and fight over the same properties
+(`.workspace` flex-direction, `.left-panel` borders, `.right-panel` width,
+etc.), corrupting the print output. This happened once already (mobile
+support work, 2026-09-03) and print.css now carries a defensive reset at
+the bottom of its `@media print` block as a second line of defense — but
+the actual fix is always: **new mobile rules in `styles.css` must start
+with `@media screen and (...)`, never a bare `@media (...)`.**
+
+When touching either file, sanity-check print by opening the browser print
+dialog (or emulating `media: print` in Playwright) at the print-preview
+width (~816px) and confirming plate + results still render side by side.
 
 ---
 

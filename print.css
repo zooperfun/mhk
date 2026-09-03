@@ -152,4 +152,19 @@
       rgba(255, 255, 255, 0.92) 6px
     );
   }
+
+  /* ── Defensive reset against mobile rules ────────────────────────
+     styles.css keeps every responsive/mobile rule scoped to
+     `@media screen and (...)`. If a future edit ever adds a bare
+     `@media (max-width: ...)` without the `screen and` prefix, it
+     would match here too — Chrome's print preview renders around
+     800-830px wide for A4/Letter, which overlaps typical tablet/
+     mobile breakpoints (this exact collision broke print once; see
+     DOCS.md → Print Layout). Re-assert the print-critical layout
+     properties last so a scoping mistake elsewhere can't silently
+     stack the plate/results columns or reintroduce stray borders. */
+  html { height: auto; }
+  .workspace  { flex-direction: row; }
+  .left-panel { border-bottom: none; }
+  .right-body { padding-bottom: 0; }
 }
