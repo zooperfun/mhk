@@ -10,6 +10,13 @@ const state = {
 
 const el = id => document.getElementById(id);
 
+const PLATE_TYPE = { LTR: 1, RTL: 2 };
+const DIRECTION_LABELS = {
+  [PLATE_TYPE.LTR]: '→ concentration increases left to right',
+  [PLATE_TYPE.RTL]: '← concentration increases right to left',
+};
+const directionLabel = plateType => DIRECTION_LABELS[plateType] ?? '↕ mixed layout';
+
 function init() {
   const sel = el('plate-select');
   for (const p of PLATE_REGISTRY) {
@@ -46,15 +53,16 @@ function init() {
 
 function loadPlate(plateId) {
   const config = PLATE_DATA[plateId];
+  if (!config) {
+    console.error(`Unknown plate id: ${plateId}`);
+    return;
+  }
   state.plateConfig     = config;
   state.drugBreakpoints = {};
   state.uncertainDrugs  = new Set();
 
   el('plate-name').textContent = config.name;
-  el('direction-label').textContent =
-    config.plateType === 1 ? '→ concentration increases left to right' :
-    config.plateType === 2 ? '← concentration increases right to left' :
-                             '↕ mixed layout';
+  el('direction-label').textContent = directionLabel(config.plateType);
 
   refreshGrid();
   clearResults();

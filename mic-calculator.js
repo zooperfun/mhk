@@ -2,14 +2,23 @@ function formatDE(str) {
   return str.replace(/\./g, ',');
 }
 
+function doubleValue(n) {
+  const doubled = n * 2;
+  return Number.isInteger(doubled) ? String(doubled) : String(parseFloat(doubled.toPrecision(10)));
+}
+
 function doubledConc(concentration, displayConc) {
-  const next = concentration * 2;
   if (displayConc.includes('/')) {
-    const raw = displayConc.split('/').map(p => String(Number(p) * 2)).join('/');
+    const raw = displayConc
+      .split('/')
+      .map(part => {
+        const n = parseFloat(part);
+        return Number.isNaN(n) ? part : doubleValue(n);
+      })
+      .join('/');
     return formatDE(raw);
   }
-  const raw = Number.isInteger(next) ? String(next) : String(parseFloat(next.toPrecision(10)));
-  return formatDE(raw);
+  return formatDE(doubleValue(concentration));
 }
 
 function calculateMIC(drug, drugBreakpoints) {

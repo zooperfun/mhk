@@ -40,6 +40,13 @@ function renderResults(container, mics, uncertainDrugs = new Set()) {
     val.textContent = mic.value;
     micTd.appendChild(val);
 
+    if (isUncertain) {
+      const flag = document.createElement('span');
+      flag.className = 'sr-only';
+      flag.textContent = ' (uncertain)';
+      micTd.appendChild(flag);
+    }
+
 
     tr.append(nameTd, abbrTd, micTd);
     tbody.appendChild(tr);

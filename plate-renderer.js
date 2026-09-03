@@ -29,6 +29,8 @@ function renderGrid(container, plateConfig, drugBreakpoints, uncertainDrugs, onW
 
   const grid = document.createElement('div');
   grid.className = 'plate-grid';
+  grid.setAttribute('role', 'group');
+  grid.setAttribute('aria-label', `${plateConfig.name} well plate`);
 
   // Corner + column headers
   const corner = document.createElement('div');
@@ -63,6 +65,7 @@ function renderGrid(container, plateConfig, drugBreakpoints, uncertainDrugs, onW
         const ctrl = document.createElement('div');
         ctrl.className = 'cell-control';
         ctrl.textContent = cell.ctrl.label;
+        ctrl.setAttribute('aria-label', `${cell.ctrl.label} control well`);
         grid.appendChild(ctrl);
         continue;
       }
@@ -93,12 +96,14 @@ function renderGrid(container, plateConfig, drugBreakpoints, uncertainDrugs, onW
         (oBottom && oRight) && 'grp-br',
       ].filter(Boolean).join(' ');
 
+      const stateLabel = isUncertain ? 'uncertain' : isPositive ? 'positive' : 'clear';
+
       const el = document.createElement('div');
       el.className = `cell-well ${shade}${isPositive ? ' positive' : ''}${isUncertain ? ' uncertain' : ''} ${grp}`;
       el.setAttribute('role', 'button');
       el.setAttribute('tabindex', '0');
       el.setAttribute('aria-pressed', isPositive ? 'true' : 'false');
-      el.setAttribute('aria-label', `${drug.name} ${well.displayConc} µg/mL`);
+      el.setAttribute('aria-label', `${drug.name} ${well.displayConc} µg/mL, ${stateLabel}`);
 
       const abbr = document.createElement('span');
       abbr.className = 'well-abbr';

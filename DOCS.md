@@ -69,7 +69,6 @@ plate-renderer.js   — Renders the 8×12 well grid
 mic-calculator.js   — MIC calculation logic
 results-panel.js    — Renders the sorted MIC results table
 data.js             — Inline plate registry and plate configs (no fetch needed)
-data/               — Original JSON source files (not loaded at runtime)
 DOCS.md             — This file
 ```
 
