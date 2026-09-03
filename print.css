@@ -1,0 +1,155 @@
+@page { size: landscape; margin: 1.5cm; }
+
+@media print {
+  .no-print { display: none !important; }
+
+  body { font-size: 11pt; color: #000; height: auto; }
+
+  #app { display: block; }
+
+  .toolbar {
+    display: flex;
+    border-bottom: 1px solid #aaa;
+    padding: 0 0 0.5rem 0;
+    height: auto;
+    margin-bottom: 0.5rem;
+  }
+
+  .workspace { display: flex; align-items: flex-start; gap: 1.5rem; }
+
+  .left-panel {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    border-right: none;
+  }
+
+  .plate-bar {
+    height: auto;
+    padding: 0 0 0.4rem 0;
+    border-bottom: 1px solid #aaa;
+    margin-bottom: 0.25rem;
+    background: transparent;
+  }
+
+  /* Direction label is redundant in print — hide it */
+  .direction-label { display: none; }
+
+  .grid-scroll { overflow: visible; padding: 0; }
+  .left-footer { display: none; }
+
+  .well-conc { font-size: 8px; }
+  .well-conc--combo { font-size: 6px; word-break: break-all; line-height: 1.2; }
+  .well-abbr { font-size: 7px; }
+  .plate-grid { --well-min-w: 38px; gap: 4px 0; }
+
+  .right-panel {
+    width: 300px;
+    flex-shrink: 0;
+    display: block;
+  }
+
+  .results-table th:nth-child(2),
+  .results-table td:nth-child(2) { width: 40px; }
+
+  .results-table th:nth-child(3),
+  .results-table td:nth-child(3) { width: 88px; padding-right: 0.5rem; }
+
+  .right-header {
+    height: auto;
+    padding: 0 0 0.4rem 0;
+    border-bottom: 1px solid #aaa;
+    margin-bottom: 0.25rem;
+    background: transparent;
+  }
+
+  .right-body { overflow: visible; }
+
+  .results-table th {
+    position: static;
+    background: transparent;
+  }
+
+  .results-table {
+    font-size: 10px;
+  }
+
+  .results-table th {
+    font-size: 8px;
+  }
+
+  .results-table th,
+  .results-table td {
+    padding: 0.2rem 0.4rem;
+  }
+
+  .td-abbr { font-size: 8px; }
+  .td-mic  { font-size: 10px; }
+
+  .results-table { page-break-inside: avoid; }
+
+  /* ── Print colour fidelity ───────────────────────── */
+
+  .cell-well,
+  .cell-control {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .cell-well.positive {
+    background: #111111 !important;
+    color: #ffffff !important;
+  }
+
+  /* ── A11y: darken all #999 muted text to pass AA 4.5:1 on white ── */
+
+  .cell-col-hdr,
+  .cell-row-lbl {
+    color: #555555;
+  }
+
+  /* Drug abbreviation inside empty/shade wells */
+  .well-abbr {
+    color: #555555;
+  }
+
+  /* Drug abbreviation inside positive (dark) wells — was 50% white = 2.8:1, now 85% = 5.5:1 */
+  .cell-well.positive .well-abbr {
+    color: rgba(255, 255, 255, 0.85) !important;
+  }
+
+  /* Control cells — was #888888 (3.95:1 with white text), now #555555 (7.4:1) */
+  .cell-control {
+    background: #555555 !important;
+    color: #ffffff !important;
+  }
+
+  /* Results table muted elements */
+  .td-abbr {
+    color: #555555;
+  }
+
+  /* ── Uncertain wells: high-contrast diagonal in print ── */
+
+  /* Force text label backgrounds to print */
+  .cell-well.uncertain .well-abbr,
+  .cell-well.uncertain .well-conc {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  /* Force the pseudo-element to print */
+  .cell-well.uncertain::after {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    /* 3px gap + 3px white = 50% coverage, near-opaque → clearly visible on dark bg */
+    background: repeating-linear-gradient(
+      -45deg,
+      transparent 0px,
+      transparent 3px,
+      rgba(255, 255, 255, 0.92) 3px,
+      rgba(255, 255, 255, 0.92) 6px
+    );
+  }
+}

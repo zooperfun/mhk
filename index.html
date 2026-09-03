@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MHK Plate Reader</title>
+  <link rel="stylesheet" href="styles.css">
+  <link rel="stylesheet" href="print.css" media="print">
+</head>
+<body>
+  <div id="app">
+
+    <div class="toolbar">
+      <div class="toolbar-left">
+        <span class="app-title">MHK</span>
+        <select id="plate-select"></select>
+      </div>
+      <div class="toolbar-center">
+        <label class="field">
+          <span class="field-lbl">Sample</span>
+          <input type="text" id="sample-id" placeholder="—" autocomplete="off" spellcheck="false">
+        </label>
+        <label class="field">
+          <span class="field-lbl">Date</span>
+          <input type="date" id="date-input">
+        </label>
+      </div>
+    </div>
+
+    <div class="workspace">
+
+      <!-- Left: plate grid -->
+      <div class="left-panel">
+        <div class="plate-bar">
+          <span class="plate-name" id="plate-name"></span>
+          <span class="direction-label" id="direction-label"></span>
+        </div>
+        <div class="grid-scroll">
+          <div id="grid"></div>
+        </div>
+        <div class="left-footer">
+          <button id="reset-btn" class="btn btn-ghost">Reset</button>
+          <button id="show-results-btn" class="btn btn-primary">Show Results</button>
+        </div>
+      </div>
+
+      <!-- Right: MIC results -->
+      <div class="right-panel">
+        <div class="right-header">
+          <span class="right-title">MIC Results</span>
+          <button id="print-btn" class="btn btn-sm btn-ghost no-print" hidden>Print</button>
+        </div>
+        <div class="right-body">
+          <div id="results-container">
+            <div class="results-empty">Mark wells on the plate,<br>then press <strong>Show Results</strong>.</div>
+          </div>
+        </div>
+        <div class="right-footer-bar no-print" id="update-bar" hidden>
+          <button id="update-btn" class="btn btn-primary" style="width:100%">Update Results</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <script src="data.js"></script>
+  <script src="mic-calculator.js"></script>
+  <script src="results-panel.js"></script>
+  <script src="plate-renderer.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
