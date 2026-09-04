@@ -168,3 +168,47 @@
   .left-panel { border-bottom: none; }
   .right-body { padding-bottom: 0; }
 }
+
+/* ── Fallback for browsers that can't force print backgrounds ──────
+   print-color-adjust/-webkit-print-color-adjust is how we force
+   background colors to print; without it (e.g. Firefox < 97, Feb 2022)
+   browsers drop all background colors on print unless the user
+   manually enables "Print backgrounds", and there's no CSS override.
+   That leaves positive/control cells rendering white-text-on-white
+   (invisible) since the color rules above assume the dark fill is
+   there. Detect the missing property and mark cells with borders +
+   black text instead — those print regardless of the background
+   setting. */
+@media print {
+  @supports (not (print-color-adjust: exact)) and (not (-webkit-print-color-adjust: exact)) {
+    .cell-well.positive {
+      background: transparent !important;
+      color: #000 !important;
+      border: 2px solid #000 !important;
+    }
+
+    .cell-well.positive .well-abbr {
+      background: transparent !important;
+      color: #000 !important;
+    }
+
+    .cell-control {
+      background: transparent !important;
+      color: #000 !important;
+      border: 2px solid #000 !important;
+      font-weight: 700;
+    }
+
+    .cell-well.uncertain::after {
+      background: none !important;
+      border: 2px dashed #000 !important;
+      inset: 1px;
+    }
+
+    .cell-well.uncertain .well-abbr,
+    .cell-well.uncertain .well-conc {
+      background: transparent !important;
+      color: #000 !important;
+    }
+  }
+}
