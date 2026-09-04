@@ -558,3 +558,46 @@ select:focus, input:focus { border-color: var(--c-border-mid); }
 
   .plate-grid { min-width: 600px; }
 }
+
+/* ── Fallbacks for old Firefox (pre-63: no flex `gap`; pre-52: no CSS Grid) ── */
+
+@supports not (gap: 1px) {
+  .toolbar > * + *        { margin-left: 1.5rem; }
+  .toolbar-left > * + *   { margin-left: 0.875rem; }
+  .toolbar-center > * + * { margin-left: 1rem; }
+  .field > * + *          { margin-left: 0.4rem; }
+  .plate-bar > * + *      { margin-left: 0.75rem; }
+  .cell-well > * + *      { margin-top: 3px; }
+
+  @media screen and (max-width: 600px) {
+    .toolbar > * + *        { margin-left: 0; margin-top: 0.75rem; }
+    .toolbar-left > * + *   { margin-left: 0; margin-top: 0.25rem; }
+    .toolbar-center > * + * { margin-left: 0; margin-top: 1rem; }
+    .field > * + *          { margin-left: 0; margin-top: 0.25rem; }
+  }
+}
+
+@supports not (display: grid) {
+  /* Approximate the grid with equal-width flex items: 1 label-width
+     column (row labels/corner) + 12 well-width columns, wrapping every
+     13 items into a row — matches grid-template-columns above. */
+  .plate-grid {
+    display: flex;
+    flex-wrap: wrap;
+    min-width: 680px;
+  }
+
+  .cell-corner,
+  .cell-row-lbl {
+    flex: 0 0 1.6rem;
+    max-width: 1.6rem;
+  }
+
+  .cell-col-hdr,
+  .cell-empty,
+  .cell-control,
+  .cell-well {
+    flex: 0 0 calc((100% - 1.6rem) / 12);
+    max-width: calc((100% - 1.6rem) / 12);
+  }
+}

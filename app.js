@@ -15,7 +15,10 @@ const DIRECTION_LABELS = {
   [PLATE_TYPE.LTR]: '→ concentration increases left to right',
   [PLATE_TYPE.RTL]: '← concentration increases right to left',
 };
-const directionLabel = plateType => DIRECTION_LABELS[plateType] ?? '↕ mixed layout';
+const directionLabel = plateType => {
+  const label = DIRECTION_LABELS[plateType];
+  return label !== undefined ? label : '↕ mixed layout';
+};
 
 function init() {
   const sel = el('plate-select');
@@ -73,7 +76,8 @@ function refreshGrid() {
 }
 
 function handleWellClick(drugId, concentration) {
-  const current    = state.drugBreakpoints[drugId] ?? null;
+  const rawCurrent = state.drugBreakpoints[drugId];
+  const current    = rawCurrent === undefined ? null : rawCurrent;
   const uncertain  = state.uncertainDrugs.has(drugId);
 
   if (current === concentration) {

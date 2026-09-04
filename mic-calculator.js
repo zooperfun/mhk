@@ -22,7 +22,8 @@ function doubledConc(concentration, displayConc) {
 }
 
 function calculateMIC(drug, drugBreakpoints) {
-  const bp = drugBreakpoints[drug.id] ?? null;
+  const rawBp = drugBreakpoints[drug.id];
+  const bp = rawBp === undefined ? null : rawBp;
   const sorted = [...drug.wells].sort((a, b) => a.concentration - b.concentration);
   const lowest  = sorted[0];
   const highest = sorted[sorted.length - 1];

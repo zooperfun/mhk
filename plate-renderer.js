@@ -71,7 +71,8 @@ function renderGrid(container, plateConfig, drugBreakpoints, uncertainDrugs, onW
       }
 
       const { drug, well, drugIndex } = cell;
-      const bp          = drugBreakpoints[drug.id] ?? null;
+      const rawBp       = drugBreakpoints[drug.id];
+      const bp          = rawBp === undefined ? null : rawBp;
       const isPositive  = bp !== null && well.concentration <= bp;
       const isUncertain = uncertainDrugs.has(drug.id) && bp !== null && well.concentration === bp;
       const shade       = drugIndex % 2 === 0 ? 'shade-a' : 'shade-b';
